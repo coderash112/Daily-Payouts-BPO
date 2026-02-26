@@ -1,310 +1,163 @@
-# BPO Services Website - Deployment Guide
+# 🔄 Files to Update in Your GitHub Repo
 
-## 📦 Package Contents
-
-This package contains a complete Next.js website with:
-- Premium BPO & IT Services website
-- Dark/Light theme support
-- Chat widget for lead capture
-- MongoDB, Google Sheets, and Email integrations
-- Fully responsive design
-
-## 🚀 Quick Start
-
-### 1. Prerequisites
-
-Make sure you have installed:
-- Node.js 18+ (https://nodejs.org/)
-- MongoDB (local or cloud like MongoDB Atlas)
-- Yarn package manager: `npm install -g yarn`
-
-### 2. Installation
-
-```bash
-# Extract the zip file
-unzip bpo-services-website.zip -d bpo-website
-
-# Navigate to project directory
-cd bpo-website
-
-# Install dependencies
-yarn install
-
-# Or use npm
-npm install
-```
-
-### 3. Environment Variables
-
-Create a `.env` file in the root directory with the following:
-
-```env
-# MongoDB Connection
-MONGO_URL=mongodb://localhost:27017/bpo_services
-# Or for MongoDB Atlas:
-# MONGO_URL=mongodb+srv://username:password@cluster.mongodb.net/bpo_services
-
-# App URL (update with your domain)
-NEXT_PUBLIC_BASE_URL=http://localhost:3000
-
-# Google Sheets Service Account
-GOOGLE_SERVICE_ACCOUNT_EMAIL=your-service-account@project.iam.gserviceaccount.com
-GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY_HERE\n-----END PRIVATE KEY-----\n"
-GOOGLE_SHEET_ID=your-google-sheet-id
-
-# Gmail SMTP Configuration
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-specific-password
-SMTP_TO_EMAIL=recipient@example.com
-```
-
-### 4. Google Sheets Setup
-
-1. Go to Google Cloud Console (https://console.cloud.google.com)
-2. Create a new project
-3. Enable Google Sheets API
-4. Create a Service Account and download the JSON key
-5. Copy `client_email` and `private_key` to your `.env` file
-6. Share your Google Sheet with the service account email (Editor access)
-
-### 5. Gmail SMTP Setup
-
-1. Go to Google Account Security: https://myaccount.google.com/security
-2. Enable 2-Step Verification
-3. Go to App Passwords: https://myaccount.google.com/apppasswords
-4. Create an app password for "Mail"
-5. Copy the 16-character password to `SMTP_PASS` in `.env`
-
-### 6. Run Development Server
-
-```bash
-# Start the development server
-yarn dev
-
-# Or with npm
-npm run dev
-```
-
-Visit http://localhost:3000 to see your website!
-
-## 🌐 Production Deployment
-
-### Option 1: Vercel (Recommended for Next.js)
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
-
-# Add environment variables in Vercel dashboard
-```
-
-### Option 2: Docker
-
-```bash
-# Build production
-yarn build
-
-# Create Dockerfile (example):
-FROM node:18-alpine
-WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn install --production
-COPY . .
-RUN yarn build
-EXPOSE 3000
-CMD ["yarn", "start"]
-
-# Build and run
-docker build -t bpo-website .
-docker run -p 3000:3000 --env-file .env bpo-website
-```
-
-### Option 3: VPS (Ubuntu/Debian)
-
-```bash
-# Install Node.js
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Install MongoDB
-# Follow: https://www.mongodb.com/docs/manual/installation/
-
-# Clone/upload your project
-cd /var/www
-# Upload your files here
-
-# Install dependencies
-yarn install
-
-# Build for production
-yarn build
-
-# Install PM2 for process management
-npm install -g pm2
-
-# Start the application
-pm2 start yarn --name "bpo-website" -- start
-
-# Setup nginx as reverse proxy (optional)
-sudo apt install nginx
-
-# Create nginx config at /etc/nginx/sites-available/bpo-website
-server {
-    listen 80;
-    server_name yourdomain.com;
-
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-
-# Enable site and restart nginx
-sudo ln -s /etc/nginx/sites-available/bpo-website /etc/nginx/sites-enabled/
-sudo systemctl restart nginx
-```
-
-## 📝 File Structure
-
-```
-bpo-website/
-├── app/
-│   ├── api/
-│   │   ├── health/route.js      # Health check endpoint
-│   │   └── leads/route.js       # Lead submission API
-│   ├── globals.css              # Global styles
-│   ├── layout.js                # Root layout with theme
-│   └── page.js                  # Main homepage
-├── components/
-│   └── ui/                      # Shadcn UI components
-├── lib/
-│   └── utils.js                 # Utility functions
-├── .env                         # Environment variables (create this)
-├── package.json                 # Dependencies
-├── tailwind.config.js           # Tailwind configuration
-└── next.config.js               # Next.js configuration
-```
-
-## 🔧 Configuration
-
-### Update Content
-
-Edit `/app/page.js` to customize:
-- Company name and branding
-- Services list
-- Contact information
-- Social media links
-
-### Customize Colors
-
-Edit `/app/globals.css` to change theme colors:
-```css
-:root {
-  --primary: YOUR_COLOR;
-  --background: YOUR_COLOR;
-  /* etc */
-}
-```
-
-### Update SEO
-
-Edit `/app/layout.js` metadata:
-```javascript
-export const metadata = {
-  title: 'Your Company Name',
-  description: 'Your description',
-}
-```
-
-## 🧪 Testing
-
-```bash
-# Test the health endpoint
-curl http://localhost:3000/api/health
-
-# Test lead submission
-curl -X POST http://localhost:3000/api/leads \
-  -H "Content-Type: application/json" \
-  -d '{
-    "companyName": "Test Corp",
-    "city": "New York",
-    "seats": "50",
-    "contactName": "John Doe",
-    "email": "john@test.com",
-    "phone": "+1-555-0123"
-  }'
-```
-
-## 🐛 Troubleshooting
-
-### MongoDB Connection Issues
-- Check if MongoDB is running: `sudo systemctl status mongodb`
-- Verify connection string in `.env`
-- For Atlas, whitelist your IP address
-
-### Google Sheets Not Working
-- Verify service account email has Editor access to the sheet
-- Check that the private key is properly formatted in `.env`
-- Ensure Google Sheets API is enabled in Cloud Console
-
-### Email Not Sending
-- Verify Gmail app password (not regular password)
-- Check SMTP settings are correct
-- Ensure 2-Step Verification is enabled on Google Account
-
-### Port Already in Use
-```bash
-# Find process using port 3000
-lsof -i :3000
-
-# Kill the process
-kill -9 <PID>
-
-# Or change port in package.json
-"dev": "next dev -p 3001"
-```
-
-## 📊 Features
-
-✅ Fully responsive (mobile, tablet, desktop)
-✅ Dark/Light theme with persistence
-✅ Step-by-step chat widget for lead capture
-✅ MongoDB database integration
-✅ Google Sheets auto-sync
-✅ Email notifications
-✅ Form validation
-✅ Smooth animations (Framer Motion)
-✅ SEO optimized
-✅ Accessibility friendly
-
-## 🔒 Security Notes
-
-1. **Never commit `.env` file to Git**
-2. Use environment variables for all secrets
-3. Enable MongoDB authentication in production
-4. Use HTTPS in production (Let's Encrypt)
-5. Keep dependencies updated: `yarn upgrade`
-
-## 📞 Support
-
-For issues or questions:
-- Check Next.js docs: https://nextjs.org/docs
-- MongoDB docs: https://www.mongodb.com/docs/
-- Tailwind CSS: https://tailwindcss.com/docs
-
-## 📄 License
-
-This project is ready for commercial use. Customize as needed!
+## ✅ MongoDB Removed - Only Google Sheets + Email Now!
 
 ---
 
-**Made with ❤️ for your BPO business success!**
+## 📋 FILES TO COPY (2 Files Only)
+
+### 1️⃣ `/app/api/leads/route.js`
+**Location in your repo:** `app/api/leads/route.js`
+
+**Action:** Replace the entire file with the updated version
+
+**What changed:**
+- ❌ Removed MongoDB connection
+- ❌ Removed database save logic
+- ✅ Kept Google Sheets integration
+- ✅ Kept Email notifications
+- ✅ Better error handling
+
+---
+
+### 2️⃣ `/package.json`
+**Location in your repo:** `package.json` (root folder)
+
+**Action:** Replace the entire file with the updated version
+
+**What changed:**
+- ❌ Removed `"mongodb": "^6.6.0"`
+- ❌ Removed `"googleapis": "^144.0.0"`
+- ✅ Added `"jsonwebtoken": "^9.0.3"` (for Google Sheets auth)
+- ✅ All other dependencies stay the same
+
+---
+
+## 🔧 VERCEL ENVIRONMENT VARIABLES
+
+### ✅ Keep These (Required):
+```
+GOOGLE_SERVICE_ACCOUNT_EMAIL=website-sheets-bot@bpo-website-integration.iam.gserviceaccount.com
+
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQClZlv36EXY7EmS\nRI8/41hB8nSV8D069kwnlYXl0AspPjaAOiTv0V72k9kL5JvyRBlf1En49wqImhwt\nAXHUP04SvAaBmOgF7PIFIdUGRgwqlwFj6Rc3PmWBkLwO0JROBTojraxiR/qFVAc2\nVA4P5jG2cS1NF7C6rMgIpKRUyZhdsNg2rDUWSrtJ001Y7VLK9IjWOpL4uUY3rVSN\nmxUEMl9sK+0p7dH/p1/mvUfuVaUTyLZdxckoykhSzYgeIY/HWcBn1dqhkE6vywn8\nDIOtjdt2nKTBfsWosnNrEGvVWu11Vmv2TxOGBYH7eN3R5sRzCsjUFvjtjCF5Ocfq\ncE7eqbMHAgMBAAECggEAAyRfqOT7trQ+bY3p3r/V5GLTvilzMFSPe80GXyhFngH1\njRgNrZSfpjWG0QgFwmNyy/Q/d4BR7ehnkp9NZ0fQluCFix65gatPqbNL1bOs9X4q\n45gA/easjPqP6AQkXRsSUK0y8icF5lSDUo/kOH8aAKpDvwwtKk6v+iIOkSHHSDhV\nAaXEuRSxmazR2CDK/W7+T9dL5QiHGTxLZwbigGlXP8lBaW1sz34FaGuNeRk+nAQA\n/xwnF+AdJOHSWgfZ5U16Xi05dNMc3IjTOr0XIz2rHNctVZpWAG4+4LPAe/frliqW\nLjmiTwE+pUInQu01Rq1C41mwFfRUZ6wRlgEzh7YkoQKBgQDPeTr04ST5Pwwh6a35\nyZEyZWljzRteRM7lBYlhlf4qvebMRBq4tJ3vIO4OQeubM6vRJ7tGs1QgDiaEEgLM\nORgKPhmhts6W6r/0YrsHMMZVNhwordbPgA2xk33nBakrCQCe5euIBQTfe+q0NOPA\nkfluXYXBk1JfomsIqlZSJvMssQKBgQDMFegGQMhD62/hAow56OwhA00F+mLdgrlK\n3VfqRVFEsXTKzp9wSdZ3d65Y//R7h/r3E6vhqACJh0f4W3Lg7Zazj5oqGiNz/KA1\nj2H2JddI3y7RC0sZ/C2ja7JaGW3+2782yu0zxwGHdVDHuHf5AT1yMImEvXSyasIm\nqdXQ8B7pNwKBgQCSYlbWsIQF2BYXV2kI9M8dX7AcWnsU6DeSH3XvBIVwYsyVEvhH\nmihUsEdGh/xUZQC1cfMQzzZr55AFXy/aJ+5uS6KKFxFsKfWF2KNdT2ygcq0rhnwp\nq4/92rLabYQOeSuW8WJddi0aAbR3sVmAZX44AIR/MBLOpyod0xFUpWauAQKBgHZ7\nwVjgA2RrK2jWsdJtB6mi4PS3iO5RFoIAPyojVCstW0Di9G2ccIarVO0WrDmLmIgZ\nQ5CemLE/eOkXLnqndPaKSFZpFmwgHmL5+0WMcpA8AlIa3F8ZqOVXgRQN724m5bxJ\n06xbvOeHlH5e+kf2EFZbF3uZAkcS8+S+dQP4Y/nBAoGAKc1vZFML4U2EbVe5QfSD\nvuQMdxOjN+jZV6AIIPUQgN7pBlWXmk2u/gs3nLc+98dWG8iw5OZCJq5+EvcPxqmp\n8M2aS/2BzQ7RBFlGFQPL26rrMh+wihdJEZcMVtur3qR1nCrMqrKvFCk2DkwOtAD4\n/XgmGVPdrG9ShCufeRBaBvg=\n-----END PRIVATE KEY-----\n"
+
+GOOGLE_SHEET_ID=1N1rxSh9mBTQ72p31Lk9DrgAUxxmScnT3SvVrHj_2mGU
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=ashrutpanhal112@gmail.com
+SMTP_PASS=gdntzxandfhpvyxe
+SMTP_TO_EMAIL=ashrut@gorack.in
+```
+
+### ❌ Delete These (Not Needed):
+```
+MONGO_URL (delete this completely)
+NEXT_PUBLIC_BASE_URL (optional - can delete)
+```
+
+---
+
+## 🚀 DEPLOYMENT STEPS
+
+### Step 1: Update GitHub
+```bash
+# In your local repo or GitHub web interface:
+1. Replace app/api/leads/route.js
+2. Replace package.json
+3. Commit and push changes
+```
+
+### Step 2: Update Vercel
+```bash
+# Go to Vercel Dashboard:
+1. Click on your project
+2. Go to Settings → Environment Variables
+3. Delete: MONGO_URL
+4. Keep all Google Sheets and SMTP variables
+5. Click Save
+```
+
+### Step 3: Redeploy (Automatic)
+```bash
+# Vercel will automatically redeploy when you push to GitHub
+# Or manually trigger:
+1. Go to Deployments tab
+2. Click "..." on latest deployment
+3. Click "Redeploy"
+```
+
+---
+
+## ✅ VERIFICATION CHECKLIST
+
+After deployment, test your website:
+
+1. **Open your Vercel URL**
+2. **Click the floating chat button**
+3. **Fill out the form:**
+   - Company: "Test Company"
+   - City: "New York"
+   - Seats: "50"
+   - Name: "John Doe"
+   - Email: "john@test.com"
+   - Phone: "+1-555-0123"
+4. **Click Submit**
+5. **Check for success message**
+6. **Verify data saved:**
+   - ✅ Check Google Sheet for new row
+   - ✅ Check email inbox for notification
+
+---
+
+## 🎯 WHAT'S CHANGED
+
+### Before (with MongoDB):
+- ❌ Required MongoDB Atlas setup
+- ❌ Database connection errors on Vercel
+- ❌ More complex deployment
+- ❌ Additional cost for database
+
+### After (Google Sheets only):
+- ✅ No database needed
+- ✅ Works perfectly on Vercel
+- ✅ Simpler deployment
+- ✅ Free forever
+- ✅ Data in Google Sheets (easy to view/export)
+- ✅ Email notifications still working
+
+---
+
+## 📝 IMPORTANT NOTES
+
+### Google Sheets Setup:
+Make sure your Google Sheet is shared with:
+```
+website-sheets-bot@bpo-website-integration.iam.gserviceaccount.com
+```
+Permission: **Editor**
+
+### GOOGLE_PRIVATE_KEY Format:
+- Must be wrapped in double quotes: `"..."`
+- Must have `\n` as literal text (not line breaks)
+- Copy exactly as shown in environment variables above
+
+### If Form Still Not Working:
+1. Check Vercel Function Logs for errors
+2. Verify all environment variables are set
+3. Make sure Google Sheet is shared with service account
+4. Test Gmail SMTP credentials
+
+---
+
+## 📞 SUPPORT
+
+If you encounter any issues:
+1. Check Vercel Function Logs
+2. Check browser console (F12)
+3. Verify environment variables are correct
+4. Make sure you've committed both files to GitHub
+
+---
+
+**Your website will now save leads to Google Sheets only - no database needed!** ✨

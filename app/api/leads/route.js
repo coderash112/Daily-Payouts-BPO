@@ -1,15 +1,6 @@
-import { MongoClient } from 'mongodb'
 import nodemailer from 'nodemailer'
 import { NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
-
-const uri = process.env.MONGO_URL
-
-async function connectDB() {
-  const client = new MongoClient(uri)
-  await client.connect()
-  return client.db('bpo_services')
-}
 
 // Get Google Sheets Access Token using JWT
 async function getAccessToken() {
@@ -63,7 +54,7 @@ async function saveToGoogleSheets(data) {
     
     // Append the new data using simpler range
     const values = [[
-      new Date().toLocaleString(),
+      new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }),
       data.companyName,
       data.city,
       data.seats,
@@ -162,35 +153,37 @@ export async function POST(request) {
       contactName: data.contactName,
       email: data.email,
       phone: data.phone,
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(),
     }
 
-    // Save to MongoDB
-    const database = await connectDB()
-    const leads = database.collection('leads')
-    const mongoResult = await leads.insertOne(leadData)
-
-    // Save to Google Sheets (parallel with email)
+    // Save to Google Sheets and send email (parallel)
     const [sheetsResult, emailResult] = await Promise.allSettled([
       saveToGoogleSheets(leadData),
       sendEmailNotification(leadData),
     ])
 
-    const warnings = []
+    const errors = []
     if (sheetsResult.status === 'rejected') {
       console.error('Sheets error:', sheetsResult.reason)
-      warnings.push('Google Sheets sync failed')
+      errors.push('Google Sheets sync failed')
     }
     if (emailResult.status === 'rejected') {
       console.error('Email error:', emailResult.reason)
-      warnings.push('Email notification failed')
+      errors.push('Email notification failed')
+    }
+
+    // If both failed, return error
+    if (errors.length === 2) {
+      return NextResponse.json(
+        { error: 'Failed to save lead. Please try again.' },
+        { status: 500 }
+      )
     }
 
     return NextResponse.json({
       success: true,
-      id: mongoResult.insertedId,
       message: 'Lead submitted successfully',
-      warnings: warnings.length > 0 ? warnings : undefined,
+      warnings: errors.length > 0 ? errors : undefined,
     })
   } catch (error) {
     console.error('API Error:', error)
