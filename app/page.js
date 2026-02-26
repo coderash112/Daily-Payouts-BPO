@@ -398,7 +398,7 @@ export default function App() {
                 </div>
                 <div className="flex items-start gap-3">
                   <Phone className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                  <span>+1(855)8894018</span>
+                  <span>+1 (855) 8894018</span>
                 </div>
               </div>
             </div>
