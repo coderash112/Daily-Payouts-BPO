@@ -394,15 +394,11 @@ export default function App() {
               <div className="space-y-3 text-muted-foreground">
                 <div className="flex items-start gap-3">
                   <Mail className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                  <a href="mailto:ashrut@gorack.in" className="hover:text-primary transition-colors">ashrut@gorack.in</a>
+                  <a href="mailto:partner@dailypayoutsbpo.com" className="hover:text-primary transition-colors">partner@dailypayoutsbpo.com</a>
                 </div>
                 <div className="flex items-start gap-3">
                   <Phone className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                  <span>+1 (555) 123-4567</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                  <span>123 Business District, USA</span>
+                  <span>+1(855)8894018</span>
                 </div>
               </div>
             </div>
