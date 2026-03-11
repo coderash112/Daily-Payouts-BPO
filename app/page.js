@@ -107,7 +107,7 @@ const services = [
     process: [
       { icon: Phone, label: 'Customer Calls' },
       { icon: Headphones, label: 'Agent Responds' },
-      { icon: Shield, label: 'Policy Setup' },
+      { icon: Shield, label: 'Policy Renewal' },
       { icon: CheckCircle, label: 'Follow-up' }
     ]
   },
@@ -286,7 +286,7 @@ export default function App() {
       >
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-            BPO Services
+            In-house Campaigns
           </div>
           
           {/* Desktop Menu */}
@@ -547,7 +547,7 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
             <div>
               <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-                BPO Services
+                In-House Campaigns
               </h3>
               <p className="text-muted-foreground mb-4">
                 Premium in-house BPO and IT services tailored for US businesses.
