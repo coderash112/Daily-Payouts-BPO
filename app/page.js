@@ -401,7 +401,7 @@ export default function App() {
                     <CardTitle className="text-xl">{service.title}</CardTitle>
                     <div className="flex items-center gap-2 mt-2">
                       <span className="text-xs font-semibold px-2 py-1 rounded-full bg-green-500/10 text-green-600 dark:text-green-400">
-                        Profit: {service.profit}/month
+                        Profit: {service.profit}/day
                       </span>
                     </div>
                   </CardHeader>
@@ -442,7 +442,7 @@ export default function App() {
                           </div>
                           <div className="mt-4 p-3 rounded-lg bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20">
                             <p className="text-sm font-semibold text-green-600 dark:text-green-400">
-                              💰 Expected Monthly Profit: {service.profit}
+                              💰 Expected daily Profit: {service.profit}
                             </p>
                           </div>
                         </motion.div>
