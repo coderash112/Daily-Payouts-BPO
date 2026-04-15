@@ -198,6 +198,33 @@ export default function App() {
     email: '',
     phone: ''
   })
+
+  const handleCallClick = () => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'conversion', {
+        send_to: 'AW-18092305814/stNZCLeSzZwcEJbbirND',
+        value: 1.0,
+        currency: 'INR',
+        event_callback: () => {
+          console.log('Call conversion tracked');
+        },
+      });
+    }
+  };
+
+  const handleWhatsAppClick = () => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'conversion', {
+        send_to: 'AW-18092305814/stNZCLeSzZwcEJbbirND', // can change later
+        value: 1.0,
+        currency: 'INR',
+        event_callback: () => {
+          console.log('WhatsApp conversion tracked');
+        },
+      });
+    }
+  };
+
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
@@ -355,7 +382,24 @@ export default function App() {
             Scalable. Secure. US-Focused.
           </p>
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Call/Whatsapp: +91-9981834205
+            Call/WhatsApp:{' '}
+            <a
+              href="tel:+919981834205"
+              onClick={handleCallClick}
+              className="hover:text-primary transition-colors font-semibold"
+            >
+              +91-9981834205
+            </a>
+            {' '}|{' '}
+            <a
+              href="https://wa.me/919981834205"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleWhatsAppClick}
+              className="hover:text-primary transition-colors font-semibold"
+            >
+              WhatsApp
+            </a>
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" onClick={() => setChatOpen(true)} className="text-lg px-8">
@@ -581,18 +625,33 @@ export default function App() {
             <div>
               <h4 className="text-lg font-semibold mb-4">Contact Us</h4>
               <div className="space-y-3 text-muted-foreground">
+   
                 <div className="flex items-start gap-3">
                   <Mail className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                  <a href="mailto:ashrut@gorack.in" className="hover:text-primary transition-colors">ashrut@gorack.in</a>
+                  <a
+                    href="mailto:ashrut@gorack.in"
+                    className="hover:text-primary transition-colors"
+                  >
+                    ashrut@gorack.in
+                  </a>
                 </div>
+
                 <div className="flex items-start gap-3">
                   <Phone className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                  <span>+91 9981834205</span>
+                  <a
+                    href="tel:+919981834205"
+                    onClick={handleCallClick}
+                    className="hover:text-primary transition-colors"
+                  >
+                    +91-9981834205
+                  </a>
                 </div>
+
                 <div className="flex items-start gap-3">
                   <MapPin className="h-5 w-5 mt-0.5 flex-shrink-0" />
                   <span>123 Business District, USA</span>
                 </div>
+
               </div>
             </div>
           </div>
