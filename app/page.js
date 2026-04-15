@@ -354,6 +354,9 @@ export default function App() {
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Scalable. Secure. US-Focused.
           </p>
+          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Call/Whatsapp: +91-9981834205
+          </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" onClick={() => setChatOpen(true)} className="text-lg px-8">
               Get Started
@@ -584,7 +587,7 @@ export default function App() {
                 </div>
                 <div className="flex items-start gap-3">
                   <Phone className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                  <span>+1 (555) 123-4567</span>
+                  <span>+91 9981834205</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <MapPin className="h-5 w-5 mt-0.5 flex-shrink-0" />
