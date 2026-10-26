@@ -384,15 +384,15 @@ export default function App() {
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Call/WhatsApp:{' '}
             <a
-              href="tel:+919981834205"
+              href="tel:+918448039031"
               onClick={handleCallClick}
               className="hover:text-primary transition-colors font-semibold"
             >
-              +91-9981834205
+              +91-8448039031
             </a>
             {' '}|{' '}
             <a
-              href="https://wa.me/919981834205"
+              href="https://wa.me/8448039031"
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleWhatsAppClick}
@@ -629,21 +629,21 @@ export default function App() {
                 <div className="flex items-start gap-3">
                   <Mail className="h-5 w-5 mt-0.5 flex-shrink-0" />
                   <a
-                    href="mailto:ashrut@gorack.in"
+                    href="mailto:info@dailypayoutsbpo.com"
                     className="hover:text-primary transition-colors"
                   >
-                    ashrut@gorack.in
+                    info@dailypayoutsbpo.com
                   </a>
                 </div>
 
                 <div className="flex items-start gap-3">
                   <Phone className="h-5 w-5 mt-0.5 flex-shrink-0" />
                   <a
-                    href="tel:+919981834205"
+                    href="tel:+918448039031"
                     onClick={handleCallClick}
                     className="hover:text-primary transition-colors"
                   >
-                    +91-9981834205
+                    +91-8448039031
                   </a>
                 </div>
 

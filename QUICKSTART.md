@@ -130,7 +130,7 @@ BPO Services → Your Company Name
 ### Update Contact Email
 Edit `/app/page.js` - Line 485:
 ```javascript
-ashrut@gorack.in → your-email@company.com
+info@dailypayoutsbpo.com → your-email@company.com
 ```
 
 ### Update Services
